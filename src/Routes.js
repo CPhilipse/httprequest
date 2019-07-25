@@ -47,10 +47,7 @@ app.post('/newUser', function(req, res, next)
         // Checking for errors.
         if(err) throw err;
 
-        // Loggin our data just to see if it worked just fine.
-        console.log("INSERT INTO users (name, email, password) values("+ req.body.name + ", "+ req.body.email + "," + req.body.password + ")");
-
-        // Actually executing the query.
+        // Executing our query.
         connection.query("INSERT INTO users (name, email, password) values('"+ req.body.name + "', '"+ req.body.email + "','" + req.body.password + "')", function (error, results, fields)
         {
             // Checking for errors.
