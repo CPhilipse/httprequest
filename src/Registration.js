@@ -21,7 +21,8 @@ export default class Registration extends Component {
     }
 
     async handleRegistration(){
-        await fetch('http://192.168.0.117:3000/newUser', {
+        console.log(this.state.name);
+        await fetch('http://my_ip:3000/newUser', {
             method: 'POST', // Here you're saying that you want to make a POST request. Could be any method, like a GET, for example.
             headers: '', // You can specify your requisition headers here. That line is optional.
             body: { // Here's the fun part. Put your data here.
