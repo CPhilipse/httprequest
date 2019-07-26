@@ -24,15 +24,16 @@ export default class Registration extends Component {
         console.log(this.state.name);
         await fetch('http://my_ip:3000/newUser', {
             method: 'POST', // Here you're saying that you want to make a POST request. Could be any method, like a GET, for example.
-            headers: '', // You can specify your requisition headers here. That line is optional.
-            body: { // Here's the fun part. Put your data here.
+            headers: "content-type": "application/json", // You can specify your requisition headers here. That line is optional.
+            body: JSON.stringify({ // Here's the fun part. Put your data here.
                 "name": this.state.name,
                 "email": this.state.email,
                 "password": this.state.password
-            }
+            });
         })
-            .then(response => response.json())
-            .then(serverResponse => console.warn(serverResponse))
+        .then(response => response.json())
+        .then(serverResponse => console.warn(serverResponse))
+        .catch((error) => console.warn(error))
     }
 
     // handleRegi = () => {
@@ -65,7 +66,7 @@ export default class Registration extends Component {
                 />
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={this.handleRegistration}
+                    onPress={() => this.handleRegistration()}
                 >
                     <Text style={styles.buttonText}>Registreren</Text>
                 </TouchableOpacity>
