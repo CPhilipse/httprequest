@@ -35,6 +35,11 @@ export default class Registration extends Component {
             .then(serverResponse => console.warn(serverResponse))
     }
 
+    // handleRegi = () => {
+    //     console.log(this.state.name, this.state.email, this.state.password);
+    //     this.handleRegistration();
+    // };
+
     render() {
         return (
             <View>

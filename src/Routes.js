@@ -59,6 +59,26 @@ app.post('/newUser', function(req, res, next)
     });
 });
 
+app.get('/newUser', function (req, res)
+{
+    // Connecting to the database.
+    db.getConnection(function (err, connection)
+    {
+        // Checking for errors.
+        if(err) throw err;
+
+        // Executing our query.
+        connection.query('SELECT * FROM users', function (error, results, fields)
+        {
+            // Checking for errors.
+            if(error) throw error;
+
+            // Sending our results.
+            res.send(results)
+        });
+    });
+});
+
 // Start our server.
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000!');
