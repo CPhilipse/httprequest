@@ -16,27 +16,6 @@ const app = express();
 app.use(bodyParser.json());
 app.use(express.json());
 
-// Creating a GET route that return all data from a MySQL table called 'users'.
-app.get('/users', function (req, res)
-{
-    // Connecting to the database.
-    db.getConnection(function (err, connection)
-    {
-        // Checking for errors.
-        if(err) throw err;
-
-        // Executing our query.
-        connection.query('SELECT * FROM users', function (error, results, fields)
-        {
-            // Checking for errors.
-            if(error) throw error;
-
-            // Sending our results.
-            res.send(results)
-        });
-    });
-});
-
 // Creating a POST route that will INSERT a new User on the 'users' table from a MySQL database.
 app.post('/newUser', function(req, res, next)
 {
@@ -59,7 +38,7 @@ app.post('/newUser', function(req, res, next)
     });
 });
 
-app.get('/newUser', function (req, res)
+app.get('/users', function (req, res)
 {
     // Connecting to the database.
     db.getConnection(function (err, connection)

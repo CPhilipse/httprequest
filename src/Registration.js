@@ -21,28 +21,27 @@ export default class Registration extends Component {
     }
 
     async handleRegistration(){
-        console.log(this.state.name);
+        console.log(this.state.name, this.state.email, this.state.password);
         await fetch('http://my_ip:3000/newUser', {
             method: 'POST', // Here you're saying that you want to make a POST request. Could be any method, like a GET, for example.
-            headers: '', // You can specify your requisition headers here. That line is optional.
-            body: { // Here's the fun part. Put your data here.
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            }, // You can specify your requisition headers here. That line is optional.
+            body: JSON.stringify({ // Here's the fun part. Put your data here.
                 "name": this.state.name,
                 "email": this.state.email,
                 "password": this.state.password
-            }
+            })
         })
             .then(response => response.json())
             .then(serverResponse => console.warn(serverResponse))
+            .catch((error) => console.warn(error))
     }
-
-    // handleRegi = () => {
-    //     console.log(this.state.name, this.state.email, this.state.password);
-    //     this.handleRegistration();
-    // };
 
     render() {
         return (
-            <View>
+            <View> 
                 <TextInput
                     style={{width: 250, borderColor: '#858585', borderWidth: 1, marginLeft: 20, backgroundColor: '#cdb3f8'}}
                     onChangeText={(name) => this.setState({name})}
@@ -65,7 +64,7 @@ export default class Registration extends Component {
                 />
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={this.handleRegistration}
+                    onPress={() => this.handleRegistration()}
                 >
                     <Text style={styles.buttonText}>Registreren</Text>
                 </TouchableOpacity>
