@@ -21,14 +21,13 @@ export default class Registration extends Component {
     }
 
     async handleRegistration(){
-        console.log(this.state.name, this.state.email, this.state.password);
-        await fetch('http://my_ip:3000/newUser', {
-            method: 'POST', // Here you're saying that you want to make a POST request. Could be any method, like a GET, for example.
+        await fetch('http://ip:3000/newCustomer', {
+            method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-            }, // You can specify your requisition headers here. That line is optional.
-            body: JSON.stringify({ // Here's the fun part. Put your data here.
+            },
+            body: JSON.stringify({
                 "name": this.state.name,
                 "email": this.state.email,
                 "password": this.state.password
@@ -41,7 +40,7 @@ export default class Registration extends Component {
 
     render() {
         return (
-            <View> 
+            <View>
                 <TextInput
                     style={{width: 250, borderColor: '#858585', borderWidth: 1, marginLeft: 20, backgroundColor: '#cdb3f8'}}
                     onChangeText={(name) => this.setState({name})}

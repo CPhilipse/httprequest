@@ -1,12 +1,15 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mysql      = require('mysql');
+const CONFIG        = require('./config');
+const bcrypt = require('bcryptjs');
 
 const db = mysql.createPool({
-    host     : '127.0.0.1',
-    user     : 'root',
-    password : '',
-    database : 'lwpcms',
+    connectionLimit : CONFIG.db_connectionlimit,
+    host            : CONFIG.db_host,
+    user            : CONFIG.db_user,
+    password        : CONFIG.db_password,
+    database        : CONFIG.db_name
 });
 
 // Initializing our app.
@@ -16,49 +19,55 @@ const app = express();
 app.use(bodyParser.json());
 app.use(express.json());
 
+// Debug, show request log.
+app.use((req, res, next) => {
+    console.log('%O', req);
+    next();
+});
+
 // Creating a POST route that will INSERT a new User on the 'users' table from a MySQL database.
-app.post('/newUser', function(req, res, next)
+app.post('/newCustomer', function(req, res, next)
 {
-    // Creating our connection.
-    db.getConnection(function(err, connection)
-    {
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(req.body.password, salt);
 
-        // Checking for errors.
-        if(err) throw err;
+    db.getConnection(function(err, connection) {
+        if (err) throw err;
+        console.log("Connected!");
+        // let sql = `CREATE TABLE test (tname VARCHAR(255), taddress VARCHAR(255))`;
 
-        // Executing our query.
-        connection.query("INSERT INTO users (name, email, password) values('"+ req.body.name + "', '"+ req.body.email + "','" + req.body.password + "')", function (error, results, fields)
-        {
-            // Checking for errors.
-            if(error) throw error;
+        db.query("INSERT INTO users (name, email, password) values('"+ req.body.name + "', '"+ req.body.email + "','" + hash + "')", function (err, results) {
+            // End connection.
+            connection.release();
 
+            if (err) throw err;
             // Sending our response code.
             res.send(JSON.stringify(results));
+            console.log("The customer is inserted!!");
         });
     });
 });
+
 
 app.get('/users', function (req, res)
 {
-    // Connecting to the database.
-    db.getConnection(function (err, connection)
-    {
-        // Checking for errors.
-        if(err) throw err;
-
-        // Executing our query.
-        connection.query('SELECT * FROM users', function (error, results, fields)
-        {
-            // Checking for errors.
-            if(error) throw error;
-
-            // Sending our results.
-            res.send(results)
+    db.getConnection(function(err, connection) {
+        if (err) throw err;
+        console.log("Connected!");
+        // let sql = `CREATE TABLE test (tname VARCHAR(255), taddress VARCHAR(255))`;
+        db.query("SELECT * FROM users", function (err, results) {
+            // End connection.
+            connection.release();
+            if (err) throw err;
+            // Sending our response code.
+            res.send(results);
         });
     });
 });
 
+// app.get('/home', function (req, res) {};
+
 // Start our server.
-app.listen(3000, () => {
+app.listen(CONFIG.port, () => {
     console.log('Server is running on http://localhost:3000!');
 });

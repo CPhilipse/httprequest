@@ -5,6 +5,7 @@ import {
     TouchableOpacity
 } from 'react-native';
 import Registration from './Registration';
+import Login from './Login';
 
 export default class Home extends Component {
     render() {
@@ -15,6 +16,12 @@ export default class Home extends Component {
                     onPress={() => this.props.navigation.navigate('Registration')}
                 >
                     <Text style={styles.buttonText}>Registreren</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => this.props.navigation.navigate('Login')}
+                >
+                    <Text style={styles.buttonText}>Inloggen</Text>
                 </TouchableOpacity>
             </View>
         );
