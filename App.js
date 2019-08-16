@@ -6,9 +6,9 @@ import Login from './src/Login';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 
 export default class App extends React.Component {
-  render() {
-    return <AppContainer />;
-  }
+    render() {
+        return <AppContainer/>;
+    }
 }
 
 const AppNavigator = createStackNavigator({

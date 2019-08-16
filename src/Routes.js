@@ -65,8 +65,6 @@ app.get('/users', function (req, res)
     });
 });
 
-// app.get('/home', function (req, res) {};
-
 // Start our server.
 app.listen(CONFIG.port, () => {
     console.log('Server is running on http://localhost:3000!');

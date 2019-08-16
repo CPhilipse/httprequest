@@ -5,6 +5,7 @@ import {
     TouchableOpacity,
     TextInput
 } from 'react-native';
+import helpers from './Helpers';
 
 export default class Registration extends Component {
     constructor(props) {
@@ -18,24 +19,6 @@ export default class Registration extends Component {
             email: '',
             password: ''
         }
-    }
-
-    async handleRegistration(){
-        await fetch('http://ip:3000/newCustomer', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                "name": this.state.name,
-                "email": this.state.email,
-                "password": this.state.password
-            })
-        })
-            .then(response => response.json())
-            .then(serverResponse => console.warn(serverResponse))
-            .catch((error) => console.warn(error))
     }
 
     render() {
@@ -63,7 +46,7 @@ export default class Registration extends Component {
                 />
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => this.handleRegistration()}
+                    onPress={() => helpers.handleRegistration(this.state.name, this.state.email, this.state.password)}
                 >
                     <Text style={styles.buttonText}>Registreren</Text>
                 </TouchableOpacity>

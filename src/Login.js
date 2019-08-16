@@ -5,6 +5,7 @@ import {
     TouchableOpacity,
     TextInput
 } from 'react-native';
+import helpers from './Helpers';
 
 export default class Login extends Component {
     constructor(props) {
@@ -14,12 +15,14 @@ export default class Login extends Component {
         this.state = {
             isLoading: true,
             loggedIn: false,
-            data: ['']
+            data: [''],
+            name: '',
+            password: ''
         }
     }
 
     componentDidMount = () => {
-        fetch('http://ip:3000/users', {
+       fetch('http://ip:3000/users', {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -33,45 +36,8 @@ export default class Login extends Component {
                 });
             })
             .then(test => console.log(test, this.state.data))
-            .then(serverResponse => console.warn(serverResponse))
             .catch((error) => console.warn(error))
     };
-
-    // handleLogin = () => {
-    //     console.log(this.state.data);
-    // };
-
-    // async handleLogin(){
-    //     await fetch('http://ip:3000/users', {
-    //         method: 'GET',
-    //         headers: {
-    //             Accept: 'application/json',
-    //             'Content-Type': 'application/json',
-    //         }
-    //     })
-    //         .then(response => response.json())
-    //         .then((responseJson) => {
-    //             this.setState({
-    //                 data: JSON.stringify(responseJson)
-    //             });
-    //         })
-    //         .then(serverResponse => console.warn(serverResponse))
-    //         .catch((error) => console.warn(error))
-    // }
-
-    checkUser () {
-        //if email && password is equal to the data in data than pass on a token to this user.
-        let itemsToIterate = this.state.data.slice(0).reverse();
-
-        for (let i = 0, len = itemsToIterate.length; i < len; i++) {
-            let email = itemsToIterate[i].email;
-            if (email === this.state.email) {
-                this.setState({loggedIn: true});
-                this.props.navigation.navigate('Login');
-            }
-            console.log(user);
-        }
-    }
 
     render() {
         return (
@@ -93,11 +59,10 @@ export default class Login extends Component {
 
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => this.checkUser()}
+                    onPress={() => helpers.checkUser(this.state.data, this.state.name)}
                 >
                     <Text style={styles.buttonText}>Inloggen</Text>
                 </TouchableOpacity>
-                {/*<Text>{this.state.data}</Text>*/}
             </View>
         );
     }
