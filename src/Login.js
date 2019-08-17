@@ -15,38 +15,19 @@ export default class Login extends Component {
         this.state = {
             isLoading: true,
             loggedIn: false,
-            data: [''],
-            name: '',
+            email: '',
             password: ''
         }
     }
-
-    componentDidMount = () => {
-       fetch('http://ip:3000/users', {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            }
-        })
-            .then(response => response.json())
-            .then((responseJson) => {
-                this.setState({
-                    data: responseJson
-                });
-            })
-            .then(test => console.log(test, this.state.data))
-            .catch((error) => console.warn(error))
-    };
 
     render() {
         return (
             <View>
                 <TextInput
                     style={{width: 250, borderColor: '#858585', borderWidth: 1, marginLeft: 20, backgroundColor: '#cdb3f8'}}
-                    onChangeText={(name) => this.setState({name})}
-                    placeholder={'Naam'}
-                    value={this.state.name}
+                    onChangeText={(email) => this.setState({email})}
+                    placeholder={'Email'}
+                    value={this.state.email}
                 />
                 <TextInput
                     style={{width: 250, borderColor: '#858585', borderWidth: 1, marginLeft: 20, backgroundColor: '#cdb3f8'}}
@@ -59,7 +40,7 @@ export default class Login extends Component {
 
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => helpers.checkUser(this.state.data, this.state.name)}
+                    onPress={() => helpers.validateUser(this.state.email, this.state.password) && this.props.navigation.navigate('Login')}
                 >
                     <Text style={styles.buttonText}>Inloggen</Text>
                 </TouchableOpacity>

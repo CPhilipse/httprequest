@@ -46,7 +46,7 @@ export default class Registration extends Component {
                 />
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => helpers.handleRegistration(this.state.name, this.state.email, this.state.password)}
+                    onPress={() => helpers.handleRegistration(this.state.name, this.state.email, this.state.password) && this.props.navigation.navigate('Login')}
                 >
                     <Text style={styles.buttonText}>Registreren</Text>
                 </TouchableOpacity>

@@ -31,6 +31,21 @@ const helpers = {
         .then(response => response.json())
         .then(serverResponse => console.warn(serverResponse))
         .catch((error) => console.warn(error))
+    },
+    validateUser: function (email, password) {
+        fetch('http://ip:3000/login', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "email": email,
+                "password": password
+            })
+        })
+            .then(response => response.json())
+            .catch((error) => console.warn(error))
     }
 };
 
