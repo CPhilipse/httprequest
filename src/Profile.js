@@ -31,42 +31,25 @@ export default class Profile extends Component {
 
     componentDidMount = async () => {
             try {
-                await AsyncStorage.getItem('jwt', (err, token) => {
-                    console.log('out of const', token);
-                    const getValue = async () => {
-                        console.log('begin of const');
-                        await fetch('http://0:3000/profile', {
-                            method: 'GET',
-                            headers: {
-                                Accept: 'application/json',
-                                Authorization: 'JWT ' + {token}
-                            }
-                                .then((response) => console.log('RESPONSE JSON: ', response.json()))
-                                .then(serverResponse => console.warn(serverResponse))
-                                .then((responseJson) => {
-                                    this.setState({
-                                        secret: responseJson.secret,
-                                        data: JSON.stringify(responseJson)
-                                    })
-                                })
-                                .then(console.log('Data: ', this.state.data, 'secret: ', this.state.secret))
-                                .catch((err) => {
-                                    // alert('There was an error fetching the secret info.', err);
-                                    throw err;
-                                })
-                        });
-                    };
-                    return getValue();
+                const token = await AsyncStorage.getItem('jwt');
+                console.log('Token: ', token);
+                const response = await fetch('http://ip:3000/profile', {
+                    method: 'GET',
+                    headers: {
+                        Accept: 'application/json',
+                        Authorization: 'Bearer ' + token
+                    }
                 });
-            } catch(e) {
-                console.log(e)
+                // console.log('3', await JSON.stringify(response.json()));
+                return await response.json();
+            } catch (err) {
+                console.log("Error: ", err)
             }
-            console.log('Done.')
         };
 
     // _fetchData = () => {
     //     AsyncStorage.getItem('jwt', (err, token) => {
-    //         fetch('http://0:3000/profile', {
+    //         fetch('http://ip:3000/profile', {
     //             headers: {
     //                 Accept: 'application/json',
     //                 Authorization: 'JWT ' + {token} + ''
