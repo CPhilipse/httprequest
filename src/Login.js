@@ -6,6 +6,7 @@ import {
     TextInput
 } from 'react-native';
 import helpers from './Helpers';
+import Profile from './Profile';
 
 export default class Login extends Component {
     constructor(props) {
@@ -40,7 +41,7 @@ export default class Login extends Component {
 
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => helpers.validateUser(this.state.email, this.state.password) && this.props.navigation.navigate('Login')}
+                    onPress={() => helpers.validateUser(this.state.email, this.state.password)}
                 >
                     <Text style={styles.buttonText}>Inloggen</Text>
                 </TouchableOpacity>

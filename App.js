@@ -29,7 +29,7 @@ const AppNavigator = createStackNavigator({
 },
 {
   headerMode: 'none',
-}, { initialRouteName: Home });
+}, { initialRouteName: Profile });
 
 const AppContainer = createAppContainer(AppNavigator);
 

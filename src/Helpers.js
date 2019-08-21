@@ -1,3 +1,6 @@
+import AsyncStorage from '@react-native-community/async-storage';
+const CONFIG        = require('./config');
+
 const helpers = {
     checkUser: function(data, name){
         //if email && password is equal to the data in data than pass on a token to this user.
@@ -16,7 +19,7 @@ const helpers = {
         }
     },
      handleRegistration: async function(name, email, password) {
-        await fetch('http://ip:3000/newCustomer', {
+        await fetch('http://' + CONFIG.ip + ':3000/newCustomer', {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -32,8 +35,9 @@ const helpers = {
         .then(serverResponse => console.warn(serverResponse))
         .catch((error) => console.warn(error))
     },
-    validateUser: function (email, password) {
-        fetch('http://ip:3000/login', {
+    validateUser: async function (email, password) {
+        try {
+            await fetch('http://' + CONFIG.ip + ':3000/login', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -45,8 +49,62 @@ const helpers = {
             })
         })
             .then(response => response.json())
+            // No '.then serverWarn'. If you add that it won't find the response below for some unknown reason.
+            .then((response) => {
+                // console.log(JSON.stringify(response.access_token), 'TEST');
+                const setValue = async () => {
+                        await AsyncStorage.setItem('jwt', JSON.stringify(response.access_token));
+                        console.log('Success! You have a protected route.');
+                };
+                // Don't just call the const, also call the function by adding the parenthesis ()
+                return setValue();
+            })
             .catch((error) => console.warn(error))
-    }
+        } catch(e) {
+            console.log(e);
+        }
+    },
+    // authenticateUser: async function () {
+    //     try {
+    //         await AsyncStorage.getItem('jwt', (err, token) => {
+    //             const getValue = async () => {
+    //                 await fetch('http://' + CONFIG.ip + ':3000/profile', {
+    //                     method: 'GET',
+    //                     headers: {
+    //                         Accept: 'application/json',
+    //                         Authorization: 'JWT ' + {token}
+    //                     }
+    //                         .then((response) => console.log(response.json()))
+    //                         .then(serverResponse => console.warn(serverResponse))
+    //                         // .then((responseJson) => {
+    //                         //     this.setState({
+    //                         //         secret: responseJson.secret,
+    //                         //         data: JSON.stringify(responseJson)
+    //                         //     })
+    //                         // })
+    //                         // .then(console.log('Data: ', this.state.data, 'secret: ', this.state.secret))
+    //                         .catch(() => {
+    //                             alert('There was an error fetching the secret info.')
+    //                         })
+    //                 });
+    //             };
+    //             return getValue();
+    //         });
+    //     } catch(e) {
+    //         console.log(e)
+    //     }
+    //     console.log('Done.')
+    // },
+    logoutUser: async function () {
+            try {
+                await AsyncStorage.removeItem('jwt');
+                alert('You have been logged out.');
+                // this.props.navigation.navigate('Login')
+            } catch(e) {
+                console.log(e);
+            }
+            console.log('Done.')
+        }
 };
 
 export default helpers;

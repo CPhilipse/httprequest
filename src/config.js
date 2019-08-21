@@ -11,9 +11,7 @@ CONFIG.db_user      = process.env.DB_USER       || 'root';
 CONFIG.db_password  = process.env.DB_PASSWORD   || '';
 CONFIG.db_connectionlimit  = process.env.DB_CL   || '10';
 
-CONFIG.secret_key  = process.env.SECRET_KEY   || 'secret';
-
-CONFIG.jwt_encryption  = process.env.JWT_ENCRYPTION || 'jwt_please_change';
-CONFIG.jwt_expiration  = process.env.JWT_EXPIRATION || '10000';
+CONFIG.secret_key  = process.env.SECRET_KEY   || '4sfH312xB5un36f8xLU4EzameJ7UggPo';
+CONFIG.ip  = process.env.IP  || 'localhost';
 
 module.exports = CONFIG;
