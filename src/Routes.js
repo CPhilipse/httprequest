@@ -59,11 +59,9 @@ app.use(express.json());
 
 // Debug, show request log.
 app.use((req, res, next) => {
-    console.log('%O', req.body);
+    console.log('%O', res);
     next();
 });
-
-
 
 const  createUser  = (user, cb) => {
     return db.getConnection(function(err, connection) {
@@ -121,18 +119,26 @@ app.post('/login', (req, res) => {
             expiresIn:  expiresIn
         });
         // To fetch the data shown below, grab the key names.
-        res.status(200).json({ "user":  user, "access_token":  accessToken, "expires_in":  expiresIn});
-        console.log('Succesful validation of the user.')
+        res.status(200).send({ "user":  user, "access_token":  accessToken, "expires_in":  expiresIn});
+        console.log('Succesful validation of the user.' + accessToken)
+    //    Token created here is not the same as the token saved in Asyncstorage. How? Why?
     });
 });
 
-// generate a signed son web token with the contents of user object and return it in the response
+// Get user when authenticated.
+// generate a signed json web token with the contents of user object and return it in the response
 app.get('/profile', passport.authenticate('jwt', { session: false }),
     function(req, res) {
-        console.log(req.user.profile, ' ||| ', req.user, ' ||| ', req.user.name);
+        // `req.user` contains the authenticated user.
+        console.log('It worked.');
         res.send(req.user);
     }
 );
+
+app.get('/logout', function(req, res){
+    req.logout();
+    res.redirect('/');
+});
 
 app.get('/users', function (req, res)
 {

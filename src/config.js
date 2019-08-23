@@ -1,4 +1,4 @@
-require('dotenv').config();//instatiate environment variables
+require('dotenv').config(); //instatiate environment variables
 
 let CONFIG = {}; //Make this global to use all over the application
 
@@ -12,6 +12,5 @@ CONFIG.db_password  = process.env.DB_PASSWORD   || '';
 CONFIG.db_connectionlimit  = process.env.DB_CL   || '10';
 
 CONFIG.secret_key  = process.env.SECRET_KEY   || '4sfH312xB5un36f8xLU4EzameJ7UggPo';
-CONFIG.ip  = process.env.IP  || 'localhost';
 
 module.exports = CONFIG;

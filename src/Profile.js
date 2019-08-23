@@ -16,34 +16,29 @@ export default class Profile extends Component {
         this.state = {
             isLoading: true,
             data: '',
-            secret: null
+            secret: null,
+            loggedIn: false
         }
     }
 
-    // componentDidMount = () => {
-    //     this.helpers._fetchData();
-    // };
-
-    // componentDidMount  () {
-    //     helpers.authenticateUser();
-    //
-    // };
-
     componentDidMount = async () => {
             try {
-                const token = await AsyncStorage.getItem('jwt');
-                console.log('Token: ', token);
+                const getToken = await AsyncStorage.getItem('jwt');
+                console.log('Profile token: ', getToken + '|');
                 const response = await fetch('http://ip:3000/profile', {
                     method: 'GET',
+                    // When token is not valid, Unauthorized will be logged.
                     headers: {
                         Accept: 'application/json',
-                        Authorization: 'Bearer ' + token
+                        Authorization: 'Bearer ' + getToken
                     }
                 });
-                // console.log('3', await JSON.stringify(response.json()));
-                return await response.json();
+                console.log('Before response');
+                const data = await response.json();
+                console.log('After response: ' + data);
+                // this.setState({loggedIn: true})
             } catch (err) {
-                console.log("Error: ", err)
+                console.log(err)
             }
         };
 
@@ -52,7 +47,7 @@ export default class Profile extends Component {
     //         fetch('http://ip:3000/profile', {
     //             headers: {
     //                 Accept: 'application/json',
-    //                 Authorization: 'JWT ' + {token} + ''
+    //                 Authorization: 'Bearer ' + token + ''
     //             }
     //         })
     //             .then((response) => response.json())
@@ -62,7 +57,7 @@ export default class Profile extends Component {
     //                     data: JSON.stringify(json)
     //                 })
     //             })
-    //             .then(console.log('Data: ', this.state.data, 'secret: ', this.state.secret))
+    //             .then((response) => response.status === 201 ? alert("sign up successfully!!!") : alert("fail signup already exist user"))
     //             .catch(() => {
     //                 alert('There was an error fetching the secret info.')
     //             })

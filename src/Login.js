@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import helpers from './Helpers';
 import Profile from './Profile';
+import AsyncStorage from "@react-native-community/async-storage";
 
 export default class Login extends Component {
     constructor(props) {
@@ -20,6 +21,33 @@ export default class Login extends Component {
             password: ''
         }
     }
+
+    validateUser = async  (email, password) => {
+        try {
+            const response = await fetch('http://ip:3000/login', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    "email": email,
+                    "password": password
+                })
+            });
+            const data = await response.json();
+            // console.log(JSON.stringify(response.access_token), 'TEST');
+            await AsyncStorage.setItem('jwt', JSON.stringify(data.access_token));
+            const getToken = await AsyncStorage.getItem('jwt');
+            // console.log('test' + getToken);
+            // return getToken === null ? 'No token' : 'Token: ' + getToken
+            // await console.log('Token: ', token);
+            await console.log('Success! You have a protected route.' + 'The token: ' + getToken);
+            await this.props.navigation.navigate('Profile')
+        } catch(e) {
+            console.log(e);
+        }
+    };
 
     render() {
         return (
@@ -41,7 +69,8 @@ export default class Login extends Component {
 
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => helpers.validateUser(this.state.email, this.state.password)}
+                    onPress={() => this.validateUser(this.state.email, this.state.password)}
+                    // onPress={() => helpers.validateUser(this.state.email, this.state.password)}
                 >
                     <Text style={styles.buttonText}>Inloggen</Text>
                 </TouchableOpacity>

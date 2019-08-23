@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-community/async-storage';
-const CONFIG        = require('./config');
 
 const helpers = {
     checkUser: function(data, name){
@@ -19,7 +18,7 @@ const helpers = {
         }
     },
      handleRegistration: async function(name, email, password) {
-        await fetch('http://' + CONFIG.ip + ':3000/newCustomer', {
+        await fetch('http://ip:3000/newCustomer', {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -35,44 +34,40 @@ const helpers = {
         .then(serverResponse => console.warn(serverResponse))
         .catch((error) => console.warn(error))
     },
-    validateUser: async function (email, password) {
-        try {
-            await fetch('http://' + CONFIG.ip + ':3000/login', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                "email": email,
-                "password": password
-            })
-        })
-            .then(response => response.json())
-            // No '.then serverWarn'. If you add that it won't find the response below for some unknown reason.
-            .then((response) => {
-                // console.log(JSON.stringify(response.access_token), 'TEST');
-                const setValue = async () => {
-                        await AsyncStorage.setItem('jwt', JSON.stringify(response.access_token));
-                        console.log('Success! You have a protected route.');
-                };
-                // Don't just call the const, also call the function by adding the parenthesis ()
-                return setValue();
-            })
-            .catch((error) => console.warn(error))
-        } catch(e) {
-            console.log(e);
-        }
-    },
+    // validateUser: async function (email, password) {
+    //     try {
+    //         const response = await fetch('http://ip:3000/login', {
+    //         method: 'POST',
+    //         headers: {
+    //             Accept: 'application/json',
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({
+    //             "email": email,
+    //             "password": password
+    //         })
+    //     });
+    //         const data = await response.json();
+    //         // console.log(JSON.stringify(response.access_token), 'TEST');
+    //         await AsyncStorage.setItem('jwt', JSON.stringify(data.access_token));
+    //         const getToken = await AsyncStorage.getItem('jwt');
+    //         // console.log('test' + getToken);
+    //         // return getToken === null ? 'No token' : 'Token: ' + getToken
+    //         // await console.log('Token: ', token);
+    //         await console.log('Success! You have a protected route.' + 'The token: ' + getToken);
+    //     } catch(e) {
+    //         console.log(e);
+    //     }
+    // },
     // authenticateUser: async function () {
     //     try {
     //         await AsyncStorage.getItem('jwt', (err, token) => {
     //             const getValue = async () => {
-    //                 await fetch('http://' + CONFIG.ip + ':3000/profile', {
+    //                 await fetch('http://ip:3000/profile', {
     //                     method: 'GET',
     //                     headers: {
     //                         Accept: 'application/json',
-    //                         Authorization: 'JWT ' + {token}
+    //                         Authorization: 'Bearer ' + token
     //                     }
     //                         .then((response) => console.log(response.json()))
     //                         .then(serverResponse => console.warn(serverResponse))
@@ -97,12 +92,16 @@ const helpers = {
     // },
     logoutUser: async function () {
             try {
-                await AsyncStorage.removeItem('jwt');
-                alert('You have been logged out.');
+                const notClearedToken = await AsyncStorage.getItem('jwt');
+                console.log('Not cleared token: ' + notClearedToken);
+                await AsyncStorage.clear();
+                const clearedToken = await AsyncStorage.getItem('jwt');
+                alert('You have been logged out.' + clearedToken);
                 // this.props.navigation.navigate('Login')
             } catch(e) {
                 console.log(e);
             }
+            // const clearedToken = await AsyncStorage.getItem('jwt');
             console.log('Done.')
         }
 };
