@@ -85,18 +85,19 @@ app.post('/newCustomer', function(req, res, next)
     const hash = bcrypt.hashSync(req.body.password, salt);
     const  name  =  req.body.name;
     const  email  =  req.body.email;
-    const SECRET_KEY = CONFIG.secret_key;
+    // const SECRET_KEY = CONFIG.secret_key;
 
+    //    When Login, it always says 'Unauthorized'. Why?
     createUser([name, email, hash], (err) => {
         if (err) return  res.status(500).send("Server error!");
         findUserByEmail(email, (err, user) => {
             if (err) return  res.status(500).send('Server error!');
-            const expiresIn = 24 * 60 * 60;
-            const accessToken = jwt.sign({ email: user.email }, SECRET_KEY, {
-                expiresIn:  expiresIn
-            });
-            res.status(200).send({ "user":  user, "access_token":  accessToken, "expires_in":  expiresIn
-            });
+            // const expiresIn = 24 * 60 * 60;
+            // const accessToken = jwt.sign({ email: user.email }, SECRET_KEY, {
+            //     expiresIn:  expiresIn
+            // });
+            // res.status(200).send({ "user":  user, "access_token":  accessToken, "expires_in":  expiresIn
+            // });
         });
     });
     }
@@ -121,7 +122,6 @@ app.post('/login', (req, res) => {
         // To fetch the data shown below, grab the key names.
         res.status(200).send({ "user":  user, "access_token":  accessToken, "expires_in":  expiresIn});
         console.log('Succesful validation of the user.' + accessToken)
-    //    Token created here is not the same as the token saved in Asyncstorage. How? Why?
     });
 });
 

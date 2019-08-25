@@ -24,18 +24,29 @@ export default class Profile extends Component {
     componentDidMount = async () => {
             try {
                 const getToken = await AsyncStorage.getItem('jwt');
-                console.log('Profile token: ', getToken + '|');
+                console.log('Profile token: ', getToken + '|', `Bearer ${getToken}`);
                 const response = await fetch('http://ip:3000/profile', {
                     method: 'GET',
                     // When token is not valid, Unauthorized will be logged.
                     headers: {
                         Accept: 'application/json',
-                        Authorization: 'Bearer ' + getToken
+                        // Template literals. String in a string, otherwise you'd have to do 'Bearer ' + getToken
+                        Authorization: `Bearer ${getToken}`
                     }
                 });
                 console.log('Before response');
-                const data = await response.json();
+                // Error is because of the .json. I get a response, but I don't seem to be able to get the body of the response through .json.
+                // JSON.parse(response) ERROR => SyntaxError: Unexpected token o in JSON at position 1
+                // JSON.stringify(response) shows me the response in a string. But how do I get to the hidden body of the response?
+
+                const data = await response.text();
                 console.log('After response: ' + data);
+                // if (Object.getOwnPropertyNames(data).length > 0) return console.log('False');
+                // for (let headers in data) { if (data.hasOwnProperty(headers))  return console.log('false'); }
+                // for(let property in data) {
+                //     console.log(property + "=" + data[property]);
+                // }
+
                 // this.setState({loggedIn: true})
             } catch (err) {
                 console.log(err)

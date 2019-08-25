@@ -14,22 +14,22 @@ export default class App extends React.Component {
 }
 
 const AppNavigator = createStackNavigator({
-  Home: {
-    screen: Home
-  },
-  Registration: {
-    screen: Registration
-  },
-  Login: {
-    screen: Login
-  },
+    Login: {
+      screen: Login
+    },
+    Registration: {
+      screen: Registration
+    },
+    Home: {
+      screen: Home
+    },
     Profile: {
       screen: Profile
     }
 },
 {
   headerMode: 'none',
-}, { initialRouteName: Profile });
+}, { initialRouteName: Registration });
 
 const AppContainer = createAppContainer(AppNavigator);
 

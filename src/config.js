@@ -11,6 +11,6 @@ CONFIG.db_user      = process.env.DB_USER       || 'root';
 CONFIG.db_password  = process.env.DB_PASSWORD   || '';
 CONFIG.db_connectionlimit  = process.env.DB_CL   || '10';
 
-CONFIG.secret_key  = process.env.SECRET_KEY   || '4sfH312xB5un36f8xLU4EzameJ7UggPo';
+CONFIG.secret_key  = process.env.SECRET_KEY   || 'LxhuKxYDIaTnSeKq0Ujk8pcPSsu9lMY4';
 
 module.exports = CONFIG;
