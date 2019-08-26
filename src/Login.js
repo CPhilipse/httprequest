@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import helpers from './Helpers';
 import Profile from './Profile';
+// import {toggle, textInput} from "./Registration";
 import styles from './styles/style';
 import AsyncStorage from "@react-native-community/async-storage";
 

@@ -21,10 +21,20 @@ const db = mysql.createPool({
 });
 
 const  findUserByEmail  = (email, cb) => {
-    return db.getConnection(function(err, connection) {
+    return db.getConnection(function(err) {
         if (err) throw err;
-        console.log("Connected!");
+        console.log("Connected! (findUserByEmail function)");
         db.query('SELECT * FROM users WHERE email = ?',[email], (err, row) => {
+            cb(err, row)
+        });
+    });
+};
+
+const  findUserById  = (id, cb) => {
+    return db.getConnection(function(err) {
+        if (err) throw err;
+        console.log("Connected! (findUserById function)");
+        db.query('SELECT * FROM users WHERE id = ?',[id], (err, row) => {
             cb(err, row)
         });
     });
@@ -34,15 +44,28 @@ let jwtOptions = {};
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 jwtOptions.secretOrKey = CONFIG.secret_key;
 
+// Problem with strategy?
 // lets create our strategy for web token
 let strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next, callback) {
-    findUserByEmail({email: jwt_payload.email}, function (res) {
+    console.log('Payload received', jwt_payload);
+    // Find the id (user) in the payload. Return this user.
+    findUserById({id: jwt_payload.id}, function (res) {
         let user = res;
-        delete user.password;
-        callback(null, user);
-    }, function (err) {
-        return callback(err, false);
+        if (user) {
+            next(null, user);
+        } else {
+            next(null, false);
+        }
     });
+
+    // findUserByEmail({email: jwt_payload.email}, function (res) {
+    //     // let user = res;
+    //     // delete user.password;
+    //     callback(null, res);
+    //     // callback(null, user);
+    // }, function (err) {
+    //     return callback(err, false);
+    // });
 });
 
 // use the strategy
@@ -64,9 +87,9 @@ app.use((req, res, next) => {
 });
 
 const  createUser  = (user, cb) => {
-    return db.getConnection(function(err, connection) {
+    return db.getConnection(function(err) {
         if (err) throw err;
-        console.log("Connected!");
+        console.log("Connected! (createUser function)");
 
         db.query('INSERT INTO users (name, email, password) VALUES (?,?,?)',user, (err) => {
             cb(err)
@@ -108,17 +131,24 @@ app.post('/login', (req, res) => {
     const SECRET_KEY = CONFIG.secret_key;
 
     findUserByEmail(email, (err, user) => {
+        //+
+        // console.log(user[0].id, 'user: ' + user[0], user);
         if (err) return  res.status(500).send('Server error!');
         if (!user) return  res.status(404).send('User not found!');
-
+        // console.log(user[0].password);
         const  result  =  bcrypt.compareSync(req.body.password, user[0].password);
         if (!result) return  res.status(401).send('Password not valid!');
 
         const  expiresIn  =  24  *  60  *  60;
+        console.log('User email: ' + user[0].email, 'User ID: ' + user[0].id);
         // Create token and specify the data in the payload
-        const  accessToken  =  jwt.sign({ email:  user.email }, SECRET_KEY, {
+        // User is found based on the req email, take the id of this user and identify the user by the id.
+        // const payload = {email: user[0].email};
+        const payloadid = {id: user[0].id};
+        const  accessToken  =  jwt.sign(payloadid, SECRET_KEY, {
             expiresIn:  expiresIn
         });
+        // console.log(user, accessToken, expiresIn);
         // To fetch the data shown below, grab the key names.
         res.status(200).send({ "user":  user, "access_token":  accessToken, "expires_in":  expiresIn});
         console.log('Succesful validation of the user.' + accessToken)
