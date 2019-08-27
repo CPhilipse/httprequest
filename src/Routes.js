@@ -46,13 +46,14 @@ jwtOptions.secretOrKey = CONFIG.secret_key;
 
 // Problem with strategy?
 // lets create our strategy for web token
+// * Why does it return an empty user?
 let strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next, callback) {
-    console.log('Payload received', jwt_payload);
+    console.log('Payload received', jwt_payload.id);
     // Find the id (user) in the payload. Return this user.
-    findUserById({id: jwt_payload.id}, function (res) {
-        let user = res;
-        if (user) {
-            next(null, user);
+    findUserById(jwt_payload.id, function (err, user) {
+        console.log(user[0], '|', jwt_payload.id);
+        if (user[0]) {
+            next(null, user[0]);
         } else {
             next(null, false);
         }
@@ -144,13 +145,17 @@ app.post('/login', (req, res) => {
         // Create token and specify the data in the payload
         // User is found based on the req email, take the id of this user and identify the user by the id.
         // const payload = {email: user[0].email};
-        const payloadid = {id: user[0].id};
-        const  accessToken  =  jwt.sign(payloadid, SECRET_KEY, {
+        const payload = {id: user[0].id};
+        const  accessToken  =  jwt.sign(payload, SECRET_KEY, {
             expiresIn:  expiresIn
+        });
+        // Token is given to the right user and token isn't expired.
+        jwt.verify(accessToken, SECRET_KEY, (errs, data) => {
+          console.log(errs, data);
         });
         // console.log(user, accessToken, expiresIn);
         // To fetch the data shown below, grab the key names.
-        res.status(200).send({ "user":  user, "access_token":  accessToken, "expires_in":  expiresIn});
+        res.status(200).json({ "user":  user, "access_token":  accessToken, "expires_in":  expiresIn});
         console.log('Succesful validation of the user.' + accessToken)
     });
 });
@@ -160,7 +165,8 @@ app.post('/login', (req, res) => {
 app.get('/profile', passport.authenticate('jwt', { session: false }),
     function(req, res) {
         // `req.user` contains the authenticated user.
-        console.log('It worked.');
+        console.log('It works.', req.user.id);
+        // It seems that this res is not being send.
         res.send(req.user);
     }
 );

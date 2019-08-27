@@ -17,7 +17,8 @@ export default class Profile extends Component {
             isLoading: true,
             data: '',
             secret: null,
-            loggedIn: false
+            loggedIn: false,
+            userName: ''
         }
     }
 
@@ -35,17 +36,17 @@ export default class Profile extends Component {
                     }
                 });
                 console.log('Before response');
-                // Error is because of the .json. I get a response, but I don't seem to be able to get the body of the response through .json.
-                // JSON.parse(response) ERROR => SyntaxError: Unexpected token o in JSON at position 1
-                // JSON.stringify(response) shows me the response in a string. But how do I get to the hidden body of the response?
-
-                const data = await response.text();
-                console.log('Response: ' + data);
-                // if (Object.getOwnPropertyNames(data).length > 0) return console.log('False');
-                // for (let headers in data) { if (data.hasOwnProperty(headers))  return console.log('false'); }
+                // Token signed to this id, OK give this user access.
+                const data = await response.json();
                 // for(let property in data) {
                 //     console.log(property + "=" + data[property]);
                 // }
+                // const middle = JSON.parse(JSON.stringify(data));
+                console.log('Response: ' + JSON.stringify(data), JSON.stringify(data.name));
+                const user = JSON.stringify(data);
+                const name = JSON.stringify(data.name);
+                await this.setState({userName: name});
+                console.log(this.state.userName);
 
                 //   Save loggedIn in local storage, on logout, empty loggedIn so it become false again.
                 // this.setState({loggedIn: true})
@@ -57,7 +58,7 @@ export default class Profile extends Component {
     render() {
         return (
             <View>
-                <Text>Hello </Text>
+                <Text>Hello {this.state.userName}</Text>
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => helpers.logoutUser()}
