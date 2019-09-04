@@ -11,11 +11,9 @@ import styles from './styles/style';
 
 export default class Registration extends Component {
     constructor(props) {
-        // Required step: always call the parent class' constructor
         super(props);
 
         this.state = {
-            // isLoading is used to show Activity loading indicator while loading data from server.
             isLoading: true,
             name: '',
             email: '',
@@ -28,56 +26,59 @@ export default class Registration extends Component {
         // Put Switch at one place. Save the toggle state in a local storage, update storage item every time it's being toggled.
         // What to do with these consts? Make 'm global? Since switchValue state will be stored, toggle const is where you
         // getItem the value of the switch. Then you can make the other constants global (export) and import them from everywhere.
-        const toggle = this.state.switchValue;
-        const textInput = toggle === true ? styles.inputText : styles.darkinputText;
-        const button = toggle === true ? styles.button : styles.darkbutton;
-        const buttonText = toggle === true ? styles.buttonText : styles.darkbuttonText;
-        const differText = toggle === true ? styles.differText : styles.darkdifferText;
-        const differNote = toggle === true ? styles.differNote : styles.darkdifferNote;
-        const formTitle =  toggle === true ? styles.formTitle : styles.darkformTitle;
-        const formNote = toggle === true ? styles.formNote : styles.darkformNote;
-        const background = toggle === true ? styles.backgroundColor : styles.darkbackgroundColor;
+        // const toggle = this.state.switchValue;
+        // const textInput = toggle === true ? styles.inputText : styles.darkinputText;
+        // const button = toggle === true ? styles.button : styles.darkbutton;
+        // const buttonText = toggle === true ? styles.buttonText : styles.darkbuttonText;
+        // const differText = toggle === true ? styles.differText : styles.darkdifferText;
+        // const differNote = toggle === true ? styles.differNote : styles.darkdifferNote;
+        // const formTitle =  toggle === true ? styles.formTitle : styles.darkformTitle;
+        // const formNote = toggle === true ? styles.formNote : styles.darkformNote;
+        // const background = toggle === true ? styles.backgroundColor : styles.darkbackgroundColor;
         return (
             // center whole view. Less code by centering every single component.
-            <View style={background}>
-                <Text>{this.state.switchValue ? console.log(this.state.switchValue, 'ON') : console.log(this.state.switchValue, 'OFF')}</Text>
-                <Switch
-                    value={this.state.switchValue}
-                    onValueChange ={(switchValue)=>this.setState({switchValue})}/>
-                <Text style={formTitle}>Create an <Text style={differText}>Account</Text></Text>
+            <View style={styles.backgroundColor}>
+                {/*<Text>{this.state.switchValue ? console.log(this.state.switchValue, 'ON') : console.log(this.state.switchValue, 'OFF')}</Text>*/}
+                {/*<Switch*/}
+                {/*    value={this.state.switchValue}*/}
+                {/*    onValueChange ={(switchValue)=>this.setState({switchValue})}/>*/}
+                <Text style={styles.formTitle}>Create an <Text style={styles.differText}>Account</Text></Text>
                 <TextInput
-                    style={textInput}
+                    style={styles.inputText}
                     onChangeText={(name) => this.setState({name})}
                     placeholder={'Name'}
-                    placeholderTextColor={toggle === true ? "#444" : "white"}
+                    // placeholderTextColor={toggle === true ? "#444" : "white"}
+                    placeholderTextColor={"#444"}
                     value={this.state.name}
                 />
                 <TextInput
-                    style={textInput}
+                    style={styles.inputText}
                     onChangeText={(email) => this.setState({email})}
                     placeholder={'Email'}
-                    placeholderTextColor={toggle === true ? "#444" : "white"}
+                    // placeholderTextColor={toggle === true ? "#444" : "white"}
+                    placeholderTextColor={"#444"}
                     value={this.state.email}
                 />
                 <TextInput
-                    style={textInput}
+                    style={styles.inputText}
                     onChangeText={(password) => this.setState({password})}
                     placeholder={'Password'}
-                    placeholderTextColor={toggle === true ? "#444" : "white"}
+                    // placeholderTextColor={toggle === true ? "#444" : "white"}
+                    placeholderTextColor={"#444"}
                     value={this.state.password}
                     secureTextEntry={true}
                     password={true}
                 />
                 <TouchableOpacity
-                    style={button}
+                    style={styles.button}
                     onPress={() => helpers.handleRegistration(this.state.name, this.state.email, this.state.password) && this.props.navigation.navigate('Login')}
                 >
-                    <Text style={buttonText}>Register</Text>
+                    <Text style={styles.buttonText}>Register</Text>
                 </TouchableOpacity>
                 <View style={styles.touchableView}>
-                    <Text style={formNote}>Already have an account? </Text>
+                    <Text style={styles.formNote}>Already have an account? </Text>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
-                        <Text style={differNote}>Login.</Text>
+                        <Text style={styles.differNote}>Login.</Text>
                     </TouchableOpacity>
                 </View>
             </View>

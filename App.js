@@ -1,13 +1,16 @@
 import React, {Fragment} from 'react';
 
-import Home from './src/Home';
-import Registration from './src/Registration';
-import Login from './src/Login';
-import Profile from './src/Profile';
-
+import Home from './screens/Home';
+import Registration from './screens/Registration';
+import Login from './screens/Login';
+import Profile from './screens/Profile';
+import SplashScreen from 'react-native-splash-screen';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 
 export default class App extends React.Component {
+    componentDidMount() {
+        SplashScreen.hide();
+    }
     render() {
         return <AppContainer/>;
     }
