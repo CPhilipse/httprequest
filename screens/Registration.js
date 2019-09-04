@@ -6,8 +6,8 @@ import {
     TextInput,
     Switch
 } from 'react-native';
-import helpers from './Helpers';
-import styles from './styles/style';
+import helpers from '../src/Helpers';
+import styles from '../src/styles/style';
 
 export default class Registration extends Component {
     constructor(props) {

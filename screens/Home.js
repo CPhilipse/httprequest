@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import Registration from './Registration';
 import Login from './Login';
-import styles from './styles/style';
+import styles from '../src/styles/style';
 
 export default class Home extends Component {
     render() {

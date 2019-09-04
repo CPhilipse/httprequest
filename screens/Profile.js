@@ -5,7 +5,7 @@ import {
     TouchableOpacity,
     TextInput
 } from 'react-native';
-import helpers from './Helpers';
+import helpers from '../src/Helpers';
 import AsyncStorage from '@react-native-community/async-storage';
 
 export default class Profile extends Component {
@@ -28,7 +28,7 @@ export default class Profile extends Component {
     componentDidMount = async () => {
             try {
                 const getToken = await AsyncStorage.getItem('jwt');
-                const response = await fetch('http://192.168.0.117:3000/profile', {
+                const response = await fetch('http://ip:3000/profile', {
                     method: 'GET',
                     // When token is not valid, Unauthorized will be logged.
                     headers: {

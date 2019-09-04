@@ -5,10 +5,10 @@ import {
     TouchableOpacity,
     TextInput, Switch
 } from 'react-native';
-import helpers from './Helpers';
+import helpers from '../src/Helpers';
 import Profile from './Profile';
 // import {toggle, textInput} from "./Registration";
-import styles from './styles/style';
+import styles from '../src/styles/style';
 import AsyncStorage from "@react-native-community/async-storage";
 
 export default class Login extends Component {
@@ -27,7 +27,7 @@ export default class Login extends Component {
 
     validateUser = async  (email, password) => {
         try {
-            const response = await fetch('http://192.168.0.117:3000/login', {
+            const response = await fetch('http://ip:3000/login', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
